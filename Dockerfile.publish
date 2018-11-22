@@ -1,0 +1,14 @@
+FROM mesosphereci/bouncer-devkit:latest
+
+# Trim the container a bit:
+RUN set -ex \
+    && apt-get clean
+
+# Make a local copy of repository before shipping it:
+COPY . /usr/local/src/bouncer/
+
+WORKDIR /usr/local/src/bouncer
+
+EXPOSE 8101
+
+CMD ["/usr/local/src/bouncer/tools/run-gunicorn-testconfig.sh"]

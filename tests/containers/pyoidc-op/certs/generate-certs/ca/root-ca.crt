@@ -1,0 +1,84 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: DC=io, DC=los-pollos, O=Bouncer OIDC unit Test, OU=Bouncer OIDC unit Test Simple Root CA, CN=Bouncer OIDC unit Test Simple Root CA
+        Validity
+            Not Before: Aug 26 16:56:57 2018 GMT
+            Not After : Aug 25 16:56:57 2028 GMT
+        Subject: DC=io, DC=los-pollos, O=Bouncer OIDC unit Test, OU=Bouncer OIDC unit Test Simple Root CA, CN=Bouncer OIDC unit Test Simple Root CA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c9:ca:7f:8c:fb:2f:e3:89:4c:de:ba:ee:99:92:
+                    18:b3:4b:7f:7d:75:a6:48:95:47:8a:c0:47:da:5e:
+                    df:8b:c6:7c:01:47:fb:34:dc:e3:1b:24:a0:e6:bb:
+                    37:a3:1b:64:2f:69:c9:c8:fd:df:4a:e5:a6:a0:64:
+                    72:00:e7:bb:d1:15:cb:ae:68:0f:ef:03:e9:68:de:
+                    36:3e:c0:37:c6:03:54:84:8d:dd:e7:80:2c:bc:89:
+                    07:f6:06:54:a8:6b:ed:cd:21:e5:5c:7b:76:98:4c:
+                    59:ad:21:a9:81:ec:31:05:40:40:95:92:12:4b:0d:
+                    71:d1:ce:55:20:cc:b1:9e:ee:bc:06:3a:6a:b4:93:
+                    84:68:f5:ea:9f:c7:0f:73:8e:0c:6e:3c:9c:29:8a:
+                    e9:6a:16:29:21:a3:d4:f0:10:e7:a9:e3:e6:5d:31:
+                    e3:92:a3:ed:a7:65:fc:ff:80:15:f9:f8:7d:e6:58:
+                    3f:d8:ff:ac:31:cb:02:a8:c2:e3:9e:01:b2:4e:fa:
+                    70:30:cb:84:46:71:7a:0b:f1:b9:2f:4a:ef:d4:8f:
+                    a4:3e:22:31:e0:47:5e:87:32:57:29:0d:7a:e9:6a:
+                    bc:cd:b9:ed:8c:b1:fb:13:b3:42:85:91:5e:b9:35:
+                    a3:00:dc:82:68:f0:cf:86:02:e4:d8:83:26:fc:29:
+                    c9:67
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                BF:A7:C9:6E:A3:66:A7:33:82:E4:A6:94:97:CB:E6:7F:02:F0:70:46
+            X509v3 Authority Key Identifier: 
+                keyid:BF:A7:C9:6E:A3:66:A7:33:82:E4:A6:94:97:CB:E6:7F:02:F0:70:46
+
+    Signature Algorithm: sha256WithRSAEncryption
+         86:aa:f7:1a:67:d5:6e:91:ec:f0:47:31:fe:a3:8f:a2:25:99:
+         21:5c:a5:5f:75:64:3f:0e:54:2f:22:15:75:b6:5e:de:7c:40:
+         4f:16:4b:7d:78:a2:54:61:50:97:b2:f9:48:be:83:f1:83:93:
+         47:45:96:ca:82:9e:5f:54:ee:fe:4f:82:fd:12:f0:62:db:9a:
+         b8:30:12:3a:f6:31:33:4d:e3:b3:ba:4c:30:cd:22:16:aa:a4:
+         80:a6:60:05:63:ee:e2:3b:dc:e7:9a:67:69:d3:83:13:07:67:
+         f5:ae:57:ae:ce:7a:a1:e8:f7:5f:41:55:ea:1a:d3:81:46:e2:
+         56:2e:53:ef:a6:a4:0c:f4:a0:49:43:17:6d:a8:9f:27:c3:91:
+         96:ec:ee:a3:2f:bc:74:a7:3e:95:e6:6a:93:65:de:6c:a0:f1:
+         61:4b:01:47:64:84:a5:65:58:85:78:38:4a:aa:3f:85:7e:8c:
+         2c:9e:e6:fa:fa:9b:1d:2c:4e:d4:da:f0:79:37:8f:fa:f1:0f:
+         51:ba:35:a0:cf:bc:e4:da:28:4d:ee:07:03:a5:76:c8:75:a7:
+         e4:ec:4b:d4:38:c5:ab:57:ea:58:3b:4a:11:02:0a:55:da:56:
+         7d:d6:74:02:06:d5:f4:b4:20:22:50:7e:af:a6:24:26:7e:76:
+         2e:8e:27:ec
+-----BEGIN CERTIFICATE-----
+MIIEQjCCAyqgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBsTESMBAGCgmSJomT8ixk
+ARkWAmlvMRowGAYKCZImiZPyLGQBGRYKbG9zLXBvbGxvczEfMB0GA1UECgwWQm91
+bmNlciBPSURDIHVuaXQgVGVzdDEuMCwGA1UECwwlQm91bmNlciBPSURDIHVuaXQg
+VGVzdCBTaW1wbGUgUm9vdCBDQTEuMCwGA1UEAwwlQm91bmNlciBPSURDIHVuaXQg
+VGVzdCBTaW1wbGUgUm9vdCBDQTAeFw0xODA4MjYxNjU2NTdaFw0yODA4MjUxNjU2
+NTdaMIGxMRIwEAYKCZImiZPyLGQBGRYCaW8xGjAYBgoJkiaJk/IsZAEZFgpsb3Mt
+cG9sbG9zMR8wHQYDVQQKDBZCb3VuY2VyIE9JREMgdW5pdCBUZXN0MS4wLAYDVQQL
+DCVCb3VuY2VyIE9JREMgdW5pdCBUZXN0IFNpbXBsZSBSb290IENBMS4wLAYDVQQD
+DCVCb3VuY2VyIE9JREMgdW5pdCBUZXN0IFNpbXBsZSBSb290IENBMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAycp/jPsv44lM3rrumZIYs0t/fXWmSJVH
+isBH2l7fi8Z8AUf7NNzjGySg5rs3oxtkL2nJyP3fSuWmoGRyAOe70RXLrmgP7wPp
+aN42PsA3xgNUhI3d54AsvIkH9gZUqGvtzSHlXHt2mExZrSGpgewxBUBAlZISSw1x
+0c5VIMyxnu68BjpqtJOEaPXqn8cPc44MbjycKYrpahYpIaPU8BDnqePmXTHjkqPt
+p2X8/4AV+fh95lg/2P+sMcsCqMLjngGyTvpwMMuERnF6C/G5L0rv1I+kPiIx4Ede
+hzJXKQ166Wq8zbntjLH7E7NChZFeuTWjANyCaPDPhgLk2IMm/CnJZwIDAQABo2Mw
+YTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUv6fJ
+bqNmpzOC5KaUl8vmfwLwcEYwHwYDVR0jBBgwFoAUv6fJbqNmpzOC5KaUl8vmfwLw
+cEYwDQYJKoZIhvcNAQELBQADggEBAIaq9xpn1W6R7PBHMf6jj6IlmSFcpV91ZD8O
+VC8iFXW2Xt58QE8WS314olRhUJey+Ui+g/GDk0dFlsqCnl9U7v5Pgv0S8GLbmrgw
+Ejr2MTNN47O6TDDNIhaqpICmYAVj7uI73OeaZ2nTgxMHZ/WuV67OeqHo919BVeoa
+04FG4lYuU++mpAz0oElDF22onyfDkZbs7qMvvHSnPpXmapNl3myg8WFLAUdkhKVl
+WIV4OEqqP4V+jCye5vr6mx0sTtTa8Hk3j/rxD1G6NaDPvOTaKE3uBwOldsh1p+Ts
+S9Q4xatX6lg7ShECClXaVn3WdAIG1fS0ICJQfq+mJCZ+di6OJ+w=
+-----END CERTIFICATE-----

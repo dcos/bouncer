@@ -1,0 +1,9 @@
+beautifulsoup4==4.6.3
+flake8==3.5.0
+docker-py==1.10.6
+pytest-cov==2.6.0
+pytest-timeout==1.0.0
+pytest==3.8.2
+requests==2.20.0
+lxml
+git+git://github.com/OpenIDC/pyoidc.git@7ad1cdbc64b5c6f52a29f1acc60a8184029a4e3c#egg=oic

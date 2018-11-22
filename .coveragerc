@@ -1,0 +1,13 @@
+[run]
+branch = True
+parallel = True
+source = bouncer
+concurrency = thread
+
+[report]
+ exclude_lines =
+    pragma: no cover
+
+[html]
+title = Bouncer unit test code coverage report
+directory = coverage-report-html

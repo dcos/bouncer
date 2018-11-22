@@ -1,0 +1,88 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: DC=io, DC=los-pollos, O=Bouncer Unit Test OIDC , OU=Bouncer unit test OIDC Simple Signing CA, CN=Bouncer unit test OIDC Simple Signing CA
+        Validity
+            Not Before: Aug 26 16:56:57 2018 GMT
+            Not After : Jul  4 16:56:57 2028 GMT
+        Subject: DC=io, DC=los-pollos, O=Bouncer Unit Test, CN=Bouncer OIDC test server
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d8:59:d9:70:02:c5:92:fc:71:6a:63:23:d7:0e:
+                    e9:25:07:5b:90:b1:7f:60:0c:b4:55:e4:1e:b0:2e:
+                    8b:fc:7b:de:a5:23:8a:ba:91:fc:47:2d:be:16:37:
+                    3b:9c:2d:b2:7e:43:cb:3a:e0:b5:a9:9b:55:17:c4:
+                    da:3d:ac:6e:7c:71:bf:90:9a:e7:ca:ba:1a:d7:28:
+                    0d:e9:5a:52:a3:7f:a8:b1:4d:bb:37:f2:b4:82:a5:
+                    56:3f:d5:d2:f6:70:3a:5c:8c:63:71:cb:6e:af:64:
+                    dc:2f:e9:f2:42:4f:cc:ff:65:ca:62:cb:bf:83:05:
+                    1a:96:09:0c:8d:d1:cc:a7:68:79:31:06:fe:e7:71:
+                    ce:d6:3c:be:d0:65:e0:60:97:7b:49:05:98:22:5b:
+                    20:f5:b7:ea:29:8a:6e:98:0e:5a:1b:10:5c:e0:ea:
+                    f3:c8:0e:df:17:e5:b3:fb:81:31:46:9a:16:bf:1d:
+                    ae:fd:7f:5e:82:34:34:9f:5a:72:54:8c:5b:21:41:
+                    dd:4b:52:2d:2f:f9:8b:bf:f1:a6:10:0d:40:36:ca:
+                    0c:5f:87:ee:f5:ea:8c:eb:bb:bc:bf:b9:2c:78:b5:
+                    3b:3b:e3:9f:8d:8a:43:30:1f:9b:b1:8d:26:18:3d:
+                    fa:d4:c9:a8:10:47:7b:e0:48:8e:6f:6b:a5:a6:51:
+                    f9:81
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Subject Key Identifier: 
+                9C:19:01:57:68:37:FD:AC:42:FB:0F:5A:3E:F8:48:F5:7E:FC:41:18
+            X509v3 Authority Key Identifier: 
+                keyid:35:7C:6E:15:57:0E:66:A2:11:85:90:21:D5:43:5A:D0:56:56:CB:01
+
+            X509v3 Subject Alternative Name: 
+                DNS:los-pollos.io
+    Signature Algorithm: sha256WithRSAEncryption
+         80:0f:29:74:de:08:ac:88:c0:56:06:ab:ab:08:7f:f6:d3:5d:
+         b0:96:20:3f:52:1f:05:97:4a:f9:a7:7e:f6:ed:53:6b:4b:6b:
+         ae:52:fb:52:5c:15:e2:6e:4b:67:12:99:51:13:22:37:0d:b7:
+         c4:f5:35:74:54:69:9d:da:f8:7f:31:cf:f6:10:64:36:e8:d2:
+         4d:8e:c9:c9:f0:91:c7:cd:68:b4:d3:73:d8:5b:84:a0:ff:a2:
+         e1:15:0d:a5:4d:00:e4:33:44:9c:2c:15:6c:d4:e7:8e:ea:a0:
+         d3:3c:0f:4f:d2:03:40:22:49:d9:df:20:73:c3:07:41:6c:c7:
+         55:40:aa:6b:ab:de:e2:af:0d:ba:3d:c9:2d:dc:6e:66:8b:04:
+         46:83:a9:e9:25:10:0b:2d:7a:fb:e7:2a:de:16:fc:fa:00:b4:
+         27:07:3d:81:81:41:c6:82:94:78:e6:ed:79:4d:c4:81:b0:8a:
+         40:19:17:a8:3c:1d:c8:66:4e:51:42:c9:2a:96:70:1f:ad:90:
+         23:e1:08:5e:07:b2:37:bc:79:ef:d8:28:55:3b:b9:1e:ef:dc:
+         10:bf:09:d2:98:44:94:38:d5:56:de:09:cf:e1:94:11:35:23:
+         06:90:07:07:fc:de:af:3c:b4:52:11:f5:89:df:1c:a5:e9:ea:
+         1d:ff:f8:d0
+-----BEGIN CERTIFICATE-----
+MIIEOzCCAyOgAwIBAgIBAjANBgkqhkiG9w0BAQsFADCBuDESMBAGCgmSJomT8ixk
+ARkWAmlvMRowGAYKCZImiZPyLGQBGRYKbG9zLXBvbGxvczEgMB4GA1UECgwXQm91
+bmNlciBVbml0IFRlc3QgT0lEQyAxMTAvBgNVBAsMKEJvdW5jZXIgdW5pdCB0ZXN0
+IE9JREMgU2ltcGxlIFNpZ25pbmcgQ0ExMTAvBgNVBAMMKEJvdW5jZXIgdW5pdCB0
+ZXN0IE9JREMgU2ltcGxlIFNpZ25pbmcgQ0EwHhcNMTgwODI2MTY1NjU3WhcNMjgw
+NzA0MTY1NjU3WjBvMRIwEAYKCZImiZPyLGQBGRYCaW8xGjAYBgoJkiaJk/IsZAEZ
+Fgpsb3MtcG9sbG9zMRowGAYDVQQKDBFCb3VuY2VyIFVuaXQgVGVzdDEhMB8GA1UE
+AwwYQm91bmNlciBPSURDIHRlc3Qgc2VydmVyMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA2FnZcALFkvxxamMj1w7pJQdbkLF/YAy0VeQesC6L/HvepSOK
+upH8Ry2+Fjc7nC2yfkPLOuC1qZtVF8TaPaxufHG/kJrnyroa1ygN6VpSo3+osU27
+N/K0gqVWP9XS9nA6XIxjcctur2TcL+nyQk/M/2XKYsu/gwUalgkMjdHMp2h5MQb+
+53HO1jy+0GXgYJd7SQWYIlsg9bfqKYpumA5aGxBc4OrzyA7fF+Wz+4ExRpoWvx2u
+/X9egjQ0n1pyVIxbIUHdS1ItL/mLv/GmEA1ANsoMX4fu9eqM67u8v7kseLU7O+Of
+jYpDMB+bsY0mGD361MmoEEd74EiOb2ulplH5gQIDAQABo4GXMIGUMA4GA1UdDwEB
+/wQEAwIFoDAJBgNVHRMEAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcD
+AjAdBgNVHQ4EFgQUnBkBV2g3/axC+w9aPvhI9X78QRgwHwYDVR0jBBgwFoAUNXxu
+FVcOZqIRhZAh1UNa0FZWywEwGAYDVR0RBBEwD4INbG9zLXBvbGxvcy5pbzANBgkq
+hkiG9w0BAQsFAAOCAQEAgA8pdN4IrIjAVgarqwh/9tNdsJYgP1IfBZdK+ad+9u1T
+a0trrlL7UlwV4m5LZxKZURMiNw23xPU1dFRpndr4fzHP9hBkNujSTY7JyfCRx81o
+tNNz2FuEoP+i4RUNpU0A5DNEnCwVbNTnjuqg0zwPT9IDQCJJ2d8gc8MHQWzHVUCq
+a6ve4q8Nuj3JLdxuZosERoOp6SUQCy16++cq3hb8+gC0Jwc9gYFBxoKUeObteU3E
+gbCKQBkXqDwdyGZOUULJKpZwH62QI+EIXgeyN7x579goVTu5Hu/cEL8J0phElDjV
+Vt4Jz+GUETUjBpAHB/zerzy0UhH1id8cpenqHf/40A==
+-----END CERTIFICATE-----
