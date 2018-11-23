@@ -10,6 +10,8 @@ Vagrant.configure(2) do |config|
     vm_cfg.vm.provision "docker"
 
     config.vm.synced_folder '.', '/vagrant', type: :virtualbox
+    
+    config.vm.network "forwarded_port", guest: 8101, host: 8101
 
     vm_cfg.vm.provider :virtualbox do |v|
       v.name = vm_cfg.vm.hostname
