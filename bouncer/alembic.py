@@ -1,3 +1,6 @@
+# Copyright (C) Mesosphere, Inc. See LICENSE file for details.
+
+
 """
 This module is replaced downstream. As of today its main job is to define and
 register the `CockroachAlembicDialect`.

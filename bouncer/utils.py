@@ -1,3 +1,6 @@
+# Copyright (C) Mesosphere, Inc. See LICENSE file for details.
+
+
 import atexit
 import logging
 import os
