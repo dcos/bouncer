@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 
 class ContainerCockroach(ContainerBase):
 
-    imagename = 'cockroachdb/cockroach:v1.1.8'
+    imagename = 'cockroachdb/cockroach:v1.1.9'
     container_name = 'bouncer-test-cockroach'
     # Listen on all interfaces on the host machine so that CockroachDB is
     # reachable through the Docker bridge network.
