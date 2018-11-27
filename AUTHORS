@@ -1,0 +1,22 @@
+# AUTHORS
+#
+# This is the list of DC/OS Bouncer authors for copyright purposes. By default,
+# contributors (or their employers) hold copyright on their contributions,
+# whether or not we note that publicly, and the commit log is the most accurate
+# record of their work.
+
+Mesosphere, Inc.
+
+
+# CONTRIBUTORS
+#
+# This does not list everyone who has contributed code. For a full list of
+# contributors, see the revision history in source control.
+
+Bouncer was created by Jan-Philip Gehrcke and has had significant contributions
+from
+
+Jan-Philip Gehrcke
+Paweł Rozlach
+Gustav Paul
+Martin Hrabovcin
