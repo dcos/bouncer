@@ -1,4 +1,4 @@
-alembic==1.0.0
+alembic==1.0.5
 Cython==0.29.1
 git+https://github.com/cockroachdb/cockroachdb-python.git@298b70ce98459fd3ce43aa843ec2b3b16098df7b
 asn1crypto==0.24.0
