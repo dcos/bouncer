@@ -2,7 +2,7 @@ alembic==1.0.5
 Cython==0.29.1
 git+https://github.com/cockroachdb/cockroachdb-python.git@298b70ce98459fd3ce43aa843ec2b3b16098df7b
 asn1crypto==0.24.0
-cryptography==2.3.1
+cryptography==2.4.2
 falcon==1.4.1
 gunicorn==19.9.0
 jsonschema==2.6.0
