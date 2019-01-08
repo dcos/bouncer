@@ -32,7 +32,9 @@ RUN set -ex \
         dnsutils net-tools less \
         gcc \
         python3-dev \
-        nmap
+        nmap \
+        nano \
+        less
 
 # Upgrading pip/setuptools and making the upgrade actually apply in the
 # following filesystem layers works more reliable when using a virtualenv for
