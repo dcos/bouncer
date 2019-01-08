@@ -75,6 +75,7 @@ DEVKIT_COMMON_DOCKER_OPTS := --name $(DEVKIT_CONTAINER_NAME) \
 	-e PYTHONDONTWRITEBYTECODE=true \
 	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v $(BOUNCER_LOCAL_PATH):$(BOUNCER_CTR_MOUNT) \
+	--tmpfs /gunicorn_tmp \
 	-v /tmp:/tmp
 
 
