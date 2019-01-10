@@ -74,6 +74,7 @@ import sqlalchemy.exc
 import sqlalchemy.orm
 import sqlalchemy.orm.session
 import sqlalchemy.schema
+from sqlalchemy.engine.url import make_url
 from cockroachdb.sqlalchemy.dialect import savepoint_state
 
 import bouncer.app.exceptions
@@ -142,6 +143,10 @@ class Database:
         return _requires_bootstrap()
 
     def conditional_bootstrap(self):
+        # The database cannot be created inside a transaction so we ensure it's
+        # existence before defining and running the retryable callback.
+        _create_database_if_not_exists()
+
         if not _requires_bootstrap():
             log.info('Database appears to be populated, skip bootstrap.')
             if alembic_cfg is not None:
@@ -151,11 +156,6 @@ class Database:
             return
 
         log.info('Database appears to be not populated, trigger bootstrap.')
-
-        # The database cannot be created inside a transaction so we ensure it's
-        # existence before defining and running the retryable callback.
-        _create_database_if_not_exists()
-
         def callback():
             log.info('Performing bootstrap procedure.')
             _bootstrap()
@@ -226,11 +226,25 @@ def _create_database_if_not_exists():
     # The `sqlalchemy_utils.create_database` function does not understand TLS
     # connection parameters as it operates on the URL alone, so we implement our
     # own.
-    log.info('Create database if it does not already exist.')
     if _engine.dialect.name == 'sqlite' and _engine.url.database == ':memory:':
         return
-    with _engine.connect() as conn:
+
+    # For postgresql (and cockroachdb) SQLAlchemy dialect checks availability of
+    # features (and version) by running queries against live DB connection. An
+    # error is thrown if the database specified in the connection string does
+    # not exist. As such, we set the database to the builtin 'system' database
+    # so the connection succeeds.
+    url = make_url(config['SQLALCHEMY_DB_URL'])
+    url.database = 'system'
+    temp_engine = sqlalchemy.create_engine(
+        url,
+        echo=False,
+        connect_args=config['SQLALCHEMY_CONNECT_ARGS']
+        )
+    log.info('Create database if it does not already exist.')
+    with temp_engine.connect() as conn:
         conn.execute("create database if not exists {};".format(_engine.url.database))
+    temp_engine.dispose()
 
 
 def _drop_database_if_exists():
