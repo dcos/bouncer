@@ -5,6 +5,7 @@ import cProfile
 import os
 import sys
 import traceback
+from pathlib import Path
 
 """
 Gunicorn configuration module.
@@ -34,6 +35,17 @@ backlog = 2048
 
 # Instruct Gunicorn to not reload upon source file modification.
 reload = False
+
+
+# When running in a devkit container the special `/gunicorn_tmp` path is created
+# in container with docker run `--tmpfs` mount. As the default `/tmp` is shared
+# between containers and is mounted from the host system the tests were failing
+# on macOS and Docker for Mac setup.
+# See: http://docs.gunicorn.org/en/stable/settings.html#worker-tmp-dir
+# See: http://docs.gunicorn.org/en/stable/faq.html#blocking-os-fchmod
+gunicorn_tmp_dir = Path('/gunicorn_tmp')
+if gunicorn_tmp_dir.exists():
+    worker_tmp_dir = str(gunicorn_tmp_dir)
 
 
 # Note(JP): Custom configuration parameters, controlling worker process

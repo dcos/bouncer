@@ -67,7 +67,16 @@ BOUNCER_CTR_MOUNT := /usr/local/src/bouncer
 # bridge networking mode and set up the custom DNS name
 # `bouncer-test-hostmachine` (via the --add-host mechanism) which can be used
 # for reaching the host machine.
-DOCKER_NETWORK_HOST_IP=$(shell ip addr show docker0 | grep 'inet\b' | awk '{print $$2}' | cut -d/ -f1)
+DOCKER_NETWORK_HOST_IP=$(shell docker network inspect bridge -f "{{ with (index .IPAM.Config 0) }}{{ .Gateway }}{{ end }}")
+# Detecting bridge network gateway by using `network inspect` can fail in some
+# cases - like it does in Mesosphere's Jenkins CI.
+# See: https://github.com/moby/moby/issues/26799
+# Fallback to `ip` command if no gateway was found using the `docker network`
+# command.
+ifeq ($(DOCKER_NETWORK_HOST_IP),)
+	DOCKER_NETWORK_HOST_IP=$(shell ip addr show docker0 | grep 'inet\b' | awk '{print $$2}' | cut -d/ -f1)
+endif
+
 DEVKIT_COMMON_DOCKER_OPTS := --name $(DEVKIT_CONTAINER_NAME) \
 	-p 8101:8101 \
 	--add-host="bouncer-test-hostmachine:${DOCKER_NETWORK_HOST_IP}" \
@@ -75,6 +84,7 @@ DEVKIT_COMMON_DOCKER_OPTS := --name $(DEVKIT_CONTAINER_NAME) \
 	-e PYTHONDONTWRITEBYTECODE=true \
 	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v $(BOUNCER_LOCAL_PATH):$(BOUNCER_CTR_MOUNT) \
+	--tmpfs /gunicorn_tmp \
 	-v /tmp:/tmp
 
 
