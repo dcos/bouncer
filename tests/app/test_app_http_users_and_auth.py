@@ -1278,6 +1278,7 @@ class TestBootstrapWithOptionalServiceAccountSuperuser:
                 algorithm='RS256')
             .decode('ascii')
             }
-        r = requests.post(Url('/auth/login'), json=credentials)
+        url = UrlBootstrapServiceAcc('/auth/login')
+        r = requests.post(url, json=credentials)
         assert r.status_code == 200
         assert 'token' in r.json()

@@ -137,6 +137,7 @@ class TestConfigBase(BaseConfig):
         self._set_if_in_env('SECRET_KEY_FILE_PATH')
         self._set_if_in_env('SUPERUSER_SERVICE_ACCOUNT_UID')
         self._set_if_in_env('SUPERUSER_SERVICE_ACCOUNT_PUBLIC_KEY')
+        self._set_if_in_env('SQLALCHEMY_DB_URL')
 
 
 class TestConfig60sUserPermissionsMaxAge(TestConfigBase):

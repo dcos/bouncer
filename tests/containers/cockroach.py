@@ -26,6 +26,8 @@ class ContainerCockroach(ContainerBase):
     # reachable through the Docker bridge network.
     listen_ip = '0.0.0.0'
 
+    sql_alchemy_base_url = 'cockroachdb://root@bouncer-test-hostmachine:26257'
+
     def __init__(self):
         super().__init__()
 
@@ -45,6 +47,19 @@ class ContainerCockroach(ContainerBase):
             command=['start', '--insecure', '--http-port=8090', '--host=0.0.0.0']
             )
 
+    def sql_alchemy_url_for_db(self, db):
+        """
+        Returns a SQL Alchemy compatible URL for connecting to cockroach DB
+        instance to provided database name.
+
+        args:
+            db (str): Name of the database
+        """
+        return "{base}/{db}".format(
+            base=self.sql_alchemy_base_url,
+            db=db,
+        )
+
     def start_and_wait(self):
         # Start container.
         self.start()
@@ -57,7 +72,7 @@ class ContainerCockroach(ContainerBase):
 
         def _accepting_connections():
             _engine = sqlalchemy.create_engine(
-                'cockroachdb://root@bouncer-test-hostmachine:26257/iam',
+                self.sql_alchemy_url_for_db('iam'),
                 echo=False,
                 connect_args={}
             )
