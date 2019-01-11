@@ -355,16 +355,20 @@ def _empty_db_tables():
     system operations.
     """
     log.info('Delete contents of all DB tables except the alembic_version table')
-    # We need to create a new MetaData as `reflect()` mutates the
-    # instance it is called on which would add an "alembic_versions"
-    # table to DeclarativeBase.metadata if we used it.
-    meta = sqlalchemy.schema.MetaData()
-    meta.reflect(_engine)
-    for table in meta.sorted_tables:
-        if table.name == 'alembic_version':
-            # Keep the list of migrations that have been run so we dun't rerun
-            # migrations in the future.
-            continue
+    meta = DeclarativeBase.metadata
+    tables = meta.sorted_tables
+
+    from .bootstrap import tables_cleanup_order
+
+    def _keep_alembic_version_table(tables):
+        # Keep the list of migrations that have been run so we dun't rerun
+        # migrations in the future.
+        return [t for t in tables if t.name != 'alembic_versions']
+
+    tables = tables_cleanup_order(tables)
+    tables = _keep_alembic_version_table(tables)
+
+    for table in tables:
         dbsession.execute(table.delete())
 
 

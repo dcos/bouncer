@@ -41,3 +41,10 @@ def insert_bootstrap_data(dbsession, bouncer_config):
         provider_id=None,
         )
     )
+
+
+def tables_cleanup_order(tables):
+    """
+    Defines order in which will be tables cleaned up on datastore reset.
+    """
+    return tables
