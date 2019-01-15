@@ -363,7 +363,7 @@ def _empty_db_tables():
     def _keep_alembic_version_table(tables):
         # Keep the list of migrations that have been run so we dun't rerun
         # migrations in the future.
-        return [t for t in tables if t.name != 'alembic_versions']
+        return [t for t in tables if t.name != 'alembic_version']
 
     tables = tables_cleanup_order(tables)
     tables = _keep_alembic_version_table(tables)
