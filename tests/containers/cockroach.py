@@ -1,8 +1,12 @@
 # Copyright (C) Mesosphere, Inc. See LICENSE file for details.
 
 
+import io
 import logging
+import tarfile
 import time
+from pathlib import Path
+from uuid import uuid4
 
 import psycopg2
 import psycopg2.errorcodes
@@ -85,6 +89,55 @@ class ContainerCockroach(ContainerBase):
             port=self.port,
             db=db,
         )
+
+    def import_database_from_backup_file(self, backup_file_path, database_name='iam'):
+        if not isinstance(backup_file_path, Path):
+            backup_file_path = Path(backup_file_path)
+
+        remote_name = str(uuid4().hex) + '.sql'
+
+        # Copy the backup_file_path file into a container
+        tarstream = io.BytesIO()
+        with tarfile.TarFile(
+            fileobj=tarstream,
+            mode='w',
+            dereference=True,
+        ) as tar:
+            tar.add(name=str(backup_file_path), arcname='/' + remote_name)
+        tarstream.seek(0)
+
+        self._cli.put_archive(
+            container=self.container_name,
+            path='/tmp',
+            data=tarstream,
+            )
+
+        # Create database if not exists
+        exec_id = self._cli.exec_create(
+            container=self.container_name,
+            cmd=(
+                "bash -c './cockroach sql --insecure"
+                " -e \"CREATE DATABASE IF NOT EXISTS {database_name};\"'".format(
+                    database_name=database_name,
+                )
+            ),
+        )
+        res = self._cli.exec_start(exec_id=exec_id)
+        assert self._cli.exec_inspect(exec_id=exec_id)['ExitCode'] == 0, res
+
+        # Import a backup into the database
+        exec_id = self._cli.exec_create(
+            container=self.container_name,
+            cmd=(
+                "bash -c './cockroach sql --insecure --database={database_name}"
+                " < /tmp/{filename}'"
+            ).format(
+                database_name=database_name,
+                filename=remote_name,
+            ),
+        )
+        res = self._cli.exec_start(exec_id=exec_id)
+        assert self._cli.exec_inspect(exec_id=exec_id)['ExitCode'] == 0, res
 
     def start_and_wait(self):
         # Start container.
