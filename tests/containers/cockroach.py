@@ -20,31 +20,56 @@ COCKROACH_IMAGE = 'cockroachdb/cockroach:v2.0.7'
 
 class ContainerCockroach(ContainerBase):
 
-    imagename = COCKROACH_IMAGE
-    container_name = 'bouncer-test-cockroach'
     # Listen on all interfaces on the host machine so that CockroachDB is
     # reachable through the Docker bridge network.
     listen_ip = '0.0.0.0'
 
-    sql_alchemy_base_url = 'cockroachdb://root@bouncer-test-hostmachine:26257'
+    # Port on which the cockroachdb listens inside the container
+    db_port = 26257
 
-    def __init__(self):
+    sql_alchemy_base_url = 'cockroachdb://root@bouncer-test-hostmachine'
+
+    def __init__(
+            self,
+            container_name='bouncer-test-cockroach',
+            imagename=COCKROACH_IMAGE,
+            port=26257,
+            volume_binds={},
+        ):
+        """
+        Args:
+            imagename (str): Name of the image that will be used to launch
+                the cockroachdb container.
+            port (int): Number on which will be cockroachdb available to
+                other containers.
+            volume_binds (dict): Bind volumes to a docker container running
+                cockroachdb.
+                See: https://docker-py.readthedocs.io/en/1.10.0/volumes/
+        """
+        self.container_name = container_name
+        self.imagename = imagename
+        self.port = port
+
         super().__init__()
 
         port_bindings = {
-            26257: (self.listen_ip, 26257),
+            self.db_port: (self.listen_ip, self.port),
             }
 
         host_config = self._cli.create_host_config(
-            port_bindings=port_bindings)
+            port_bindings=port_bindings,
+            binds=volume_binds)
 
         self._container = self._cli.create_container(
-            image=self.imagename,
+            image=imagename,
             detach=True,
             ports=list(port_bindings),
             host_config=host_config,
-            name=self.container_name,
-            command=['start', '--insecure', '--http-port=8090', '--host=0.0.0.0']
+            name=container_name,
+            command=[
+                'start', '--insecure', '--http-port=8090',
+                '--host={listen_ip}'.format(listen_ip=self.listen_ip),
+                ]
             )
 
     def sql_alchemy_url_for_db(self, db):
@@ -55,8 +80,9 @@ class ContainerCockroach(ContainerBase):
         args:
             db (str): Name of the database
         """
-        return "{base}/{db}".format(
+        return "{base}:{port}/{db}".format(
             base=self.sql_alchemy_base_url,
+            port=self.port,
             db=db,
         )
 
