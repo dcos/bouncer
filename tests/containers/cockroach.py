@@ -39,7 +39,7 @@ class ContainerCockroach(ContainerBase):
             imagename=COCKROACH_IMAGE,
             port=26257,
             volume_binds={},
-        ):
+            ):
         """
         Args:
             imagename (str): Name of the image that will be used to launch
