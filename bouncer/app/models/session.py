@@ -297,26 +297,6 @@ def _drop_database_if_exists():
         conn.execute("drop database if exists {};".format(_engine.url.database))
 
 
-def _requires_bootstrap():
-    """Detect a fresh install.
-
-    Return `True` if the database appears to require a bootstrap procedure. For
-    starters, decide that based on the existence of the `users` table.
-    """
-    log.info('Identify whether the `users` table exists.')
-    try:
-        r = _engine.dialect.has_table(dbsession.connection(), 'users')
-        log.info('`users` table exists: %s', r)
-        return not r
-    except sqlalchemy.exc.ProgrammingError as exc:
-        if hasattr(exc.orig, 'pgcode'):
-            # This works with CockroachDB.
-            if exc.orig.pgcode == psycopg2.errorcodes.INVALID_CATALOG_NAME:
-                log.info('Database `iam` does not exist.')
-                return True
-        raise
-
-
 def _requires_schema_to_be_created():
     """Detect a fresh install.
 
