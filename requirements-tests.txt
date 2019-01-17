@@ -1,6 +1,6 @@
 beautifulsoup4==4.6.3
 flake8==3.5.0
-docker-py==1.10.6
+docker==3.7.0
 pytest-cov==2.6.0
 pytest-timeout==1.0.0
 pytest==4.0.1
