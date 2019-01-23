@@ -271,11 +271,12 @@ def _create_database_if_not_exists():
     if _engine.dialect.name == 'sqlite' and _engine.url.database == ':memory:':
         return
 
-    # For postgresql (and cockroachdb) SQLAlchemy dialect checks availability of
-    # features (and version) by running queries against live DB connection. An
-    # error is thrown if the database specified in the connection string does
+    # An error is thrown if the database specified in the connection string does
     # not exist. As such, we set the database to the builtin 'system' database
-    # so the connection succeeds.
+    # so the connection succeeds. The cockroachdb SQLAlchemy driver checks
+    # availability of features and a cockroachdb version by running queries
+    # against live DB connection so they need to be executed against existing
+    # database.
     url = make_url(config['SQLALCHEMY_DB_URL'])
     url.database = 'system'
     temp_engine = sqlalchemy.create_engine(
@@ -341,7 +342,7 @@ def _empty_db_tables():
     from .bootstrap import tables_cleanup_order
 
     def _keep_alembic_version_table(tables):
-        # Keep the list of migrations that have been run so we dun't rerun
+        # Keep the list of migrations that have been run so we don't rerun
         # migrations in the future.
         return [t for t in tables if t.name != 'alembic_version']
 
