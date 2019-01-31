@@ -48,7 +48,9 @@ class ContainerCockroach(ContainerBase):
                 other containers.
             volume_binds (dict): Bind volumes to a docker container running
                 cockroachdb.
-                See: https://docker-py.readthedocs.io/en/1.10.0/volumes/
+
+                See `Using volumes` section at
+                https://docker-py.readthedocs.io/en/3.7.0/api.html#docker.api.container.ContainerApiMixin.create_container
         """
         self.container_name = container_name
         self.imagename = imagename
