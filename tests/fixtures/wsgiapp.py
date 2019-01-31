@@ -42,7 +42,8 @@ def wsgi_app_with_bootstrap_service_account(tmpdir_factory, cockroach):
 
     env = {
         'SUPERUSER_SERVICE_ACCOUNT_UID': uid,
-        'SUPERUSER_SERVICE_ACCOUNT_PUBLIC_KEY': pubkey
+        'SUPERUSER_SERVICE_ACCOUNT_PUBLIC_KEY': pubkey,
+        'SQLALCHEMY_DB_URL': cockroach.sql_alchemy_url_for_db('iam_with_sa'),
     }
 
     tmpdir = tmpdir_factory.mktemp('TestConfigSvcAcc')

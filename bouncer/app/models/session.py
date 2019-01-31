@@ -74,6 +74,7 @@ import sqlalchemy.exc
 import sqlalchemy.orm
 import sqlalchemy.orm.session
 import sqlalchemy.schema
+from sqlalchemy.engine.url import make_url
 from cockroachdb.sqlalchemy.dialect import savepoint_state
 
 import bouncer.app.exceptions
@@ -132,6 +133,32 @@ from .base import DeclarativeBase  # noqa: E402
 from .config import ConfigItem  # noqa: E402
 
 
+# We explicitly create the alembic_version table as part of our
+# DeclarativeBase.metadata. This allows us to create it alongside the rest of
+# our schema. Without that, we would have to create the table and insert the
+# first version_num into it in the same transaction, which is the alembic
+# default mode of operation. Executing DML statements after DDL statements in
+# the same transaction is, however, not supported by cockroachdb 2.0. As such,
+# we must create all the tables, indexes, and execute other DDL in the first
+# bootstrap transaction and load all the bootstrap data in the second
+# transaction.
+#
+# We safely added this table to our initial schema in ./bouncer/alembic.py
+# because from DC/OS 1.12.0+ we can assume that migrations have already been
+# run before, and that for all intents and purposes it has existed from
+# the start.
+#
+# We use and assume the default `alembic_version` table name and schema:
+# https://github.com/zzzeek/alembic/blob/6c2934661f38833ec2a325bb43f1dd5cdfec9ca1/alembic/runtime/migration.py#L284
+version_table = sqlalchemy.Table(
+    'alembic_version', DeclarativeBase.metadata,
+    sqlalchemy.Column('version_num', sqlalchemy.String(32), nullable=False),
+    schema=None)
+version_table.append_constraint(
+    sqlalchemy.PrimaryKeyConstraint('version_num', name="alembic_version_pkc"),
+    )
+
+
 class Database:
     """Database abstraction. Provide utilities used in the application."""
 
@@ -142,6 +169,10 @@ class Database:
         return _requires_bootstrap()
 
     def conditional_bootstrap(self):
+        # The database cannot be created inside a transaction so we ensure it's
+        # existence before defining and running the retryable callback.
+        _create_database_if_not_exists()
+
         if not _requires_bootstrap():
             log.info('Database appears to be populated, skip bootstrap.')
             if alembic_cfg is not None:
@@ -152,15 +183,26 @@ class Database:
 
         log.info('Database appears to be not populated, trigger bootstrap.')
 
-        # The database cannot be created inside a transaction so we ensure it's
-        # existence before defining and running the retryable callback.
-        _create_database_if_not_exists()
+        # Check if the schema has already been created. If not, create it.
+        # This happens in a separate transaction.
+        def schema_callback():
+            log.info('Preparing initial database schema.')
+            if not _requires_schema_to_be_created():
+                log.info('Database schema already exists...skipping.')
+                return
+            _create_db_tables()
+        run_transaction(schema_callback)
 
-        def callback():
-            log.info('Performing bootstrap procedure.')
+        # Check if the bootstrap data has already been inserted into the
+        # database. If not, insert the new data. This happens in a separate
+        # transaction.
+        def data_callback():
+            log.info('Preparing initial bootstrap data.')
+            if not _requires_initial_bootstrap_data():
+                log.info('Bootstrap data has already been inserted...skipping.')
+                return
             _bootstrap()
-
-        run_transaction(callback)
+        run_transaction(data_callback)
 
     def create_database_if_not_exists(self):
         _create_database_if_not_exists()
@@ -226,11 +268,26 @@ def _create_database_if_not_exists():
     # The `sqlalchemy_utils.create_database` function does not understand TLS
     # connection parameters as it operates on the URL alone, so we implement our
     # own.
-    log.info('Create database if it does not already exist.')
     if _engine.dialect.name == 'sqlite' and _engine.url.database == ':memory:':
         return
-    with _engine.connect() as conn:
+
+    # An error is thrown if the database specified in the connection string does
+    # not exist. As such, we set the database to the builtin 'system' database
+    # so the connection succeeds. The cockroachdb SQLAlchemy driver checks
+    # availability of features and a cockroachdb version by running queries
+    # against live DB connection so they need to be executed against existing
+    # database.
+    url = make_url(config['SQLALCHEMY_DB_URL'])
+    url.database = 'system'
+    temp_engine = sqlalchemy.create_engine(
+        url,
+        echo=False,
+        connect_args=config['SQLALCHEMY_CONNECT_ARGS']
+        )
+    log.info('Create database if it does not already exist.')
+    with temp_engine.connect() as conn:
         conn.execute("create database if not exists {};".format(_engine.url.database))
+    temp_engine.dispose()
 
 
 def _drop_database_if_exists():
@@ -241,24 +298,26 @@ def _drop_database_if_exists():
         conn.execute("drop database if exists {};".format(_engine.url.database))
 
 
-def _requires_bootstrap():
+def _requires_schema_to_be_created():
     """Detect a fresh install.
 
-    Return `True` if the database appears to require a bootstrap procedure. For
+    Return `True` if the database does not have its schema populated yet. For
     starters, decide that based on the existence of the `users` table.
     """
     log.info('Identify whether the `users` table exists.')
-    try:
-        r = _engine.dialect.has_table(dbsession.connection(), 'users')
-        log.info('`users` table exists: %s', r)
-        return not r
-    except sqlalchemy.exc.ProgrammingError as exc:
-        if hasattr(exc.orig, 'pgcode'):
-            # This works with CockroachDB.
-            if exc.orig.pgcode == psycopg2.errorcodes.INVALID_CATALOG_NAME:
-                log.info('Database `iam` does not exist.')
-                return True
-        raise
+    r = _engine.dialect.has_table(dbsession.connection(), 'users')
+    log.info('`users` table exists: %s', r)
+    return not r
+
+
+def _requires_initial_bootstrap_data():
+    versions = dbsession.query(version_table).all()
+    log.info("Found migrations: {}".format(versions))
+    return len(versions) == 0
+
+
+def _requires_bootstrap():
+    return _requires_schema_to_be_created() or _requires_initial_bootstrap_data()
 
 
 def _create_db_tables():
@@ -266,8 +325,6 @@ def _create_db_tables():
 
     Do not attempt recreate tables already present in the database.
     """
-    # We use the current session connection instead of the _engine itself so
-    # table creation forms part of the same transaction that populates
     DeclarativeBase.metadata.create_all(dbsession.connection())
 
 
@@ -279,16 +336,20 @@ def _empty_db_tables():
     system operations.
     """
     log.info('Delete contents of all DB tables except the alembic_version table')
-    # We need to create a new MetaData as `reflect()` mutates the
-    # instance it is called on which would add an "alembic_versions"
-    # table to DeclarativeBase.metadata if we used it.
-    meta = sqlalchemy.schema.MetaData()
-    meta.reflect(_engine)
-    for table in meta.sorted_tables:
-        if table.name == 'alembic_version':
-            # Keep the list of migrations that have been run so we dun't rerun
-            # migrations in the future.
-            continue
+    meta = DeclarativeBase.metadata
+    tables = meta.sorted_tables
+
+    from .bootstrap import tables_cleanup_order
+
+    def _keep_alembic_version_table(tables):
+        # Keep the list of migrations that have been run so we don't rerun
+        # migrations in the future.
+        return [t for t in tables if t.name != 'alembic_version']
+
+    tables = tables_cleanup_order(tables)
+    tables = _keep_alembic_version_table(tables)
+
+    for table in tables:
         dbsession.execute(table.delete())
 
 
@@ -308,15 +369,11 @@ def _stamp_schema_revision(rev):
 
 
 def _bootstrap():
-    """Bootstrap database: create tables, populate with initial data.
+    """Bootstrap: populate with initial data.
 
-    Assume to see an empty database (no relevant tables yet).
+    Assume to see an empty database schema (no data yet).
     """
-    log.info('Create (empty) database tables.')
-
     from .bootstrap import insert_bootstrap_data
-
-    _create_db_tables()
 
     insert_bootstrap_data(dbsession, bouncer_config=config)
 

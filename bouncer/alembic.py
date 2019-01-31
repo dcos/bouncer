@@ -7,13 +7,7 @@ register the `CockroachAlembicDialect`.
 """
 
 import cockroachdb.sqlalchemy.dialect
-import sqlalchemy.types as sqltypes
 import alembic.ddl.postgresql
-
-# Monkey-patch CockroachDB SQLAchemy dialect to add 'BOOL' -> BOOLEAN
-# to the type map. This resolves an issue where the 'BOOL' type
-# reflected for `is_remote` is not mapped to a known type.
-cockroachdb.sqlalchemy.dialect._type_map['bool'] = sqltypes.BOOLEAN
 
 
 class CockroachAlembicDialect(

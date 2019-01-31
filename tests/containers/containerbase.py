@@ -32,7 +32,7 @@ class ContainerBase():
     def __init__(self):
         log.info('Set up Docker client')
         try:
-            c = docker.Client(
+            c = docker.APIClient(
                 base_url='unix://var/run/docker.sock',
                 version='auto')
         except Exception as e:
