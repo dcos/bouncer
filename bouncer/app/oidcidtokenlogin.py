@@ -44,7 +44,7 @@ def get_login_provider_items_from_database_cfgitems(_):
             "config": {
                 # Note(JP): it's actually Admin Router which starts some magic
                 # at this endpoint. Bouncer does not actually start the flow.
-                "start_flow_url": "/login"
+                "start_flow_url": "/login?redirect_uri=urn:ietf:wg:oauth:2.0:oob"
             }
         }
     }
