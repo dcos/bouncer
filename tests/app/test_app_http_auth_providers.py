@@ -31,6 +31,8 @@ class TestListAuthProviders:
             'dcos-services',
             'dcos-oidc-auth0'
         ])
+        start_flow_url = d['dcos-oidc-auth0']['config']['start_flow_url']
+        assert 'redirect_uri' in start_flow_url
 
     def test_legacy_user_creation_with_meaningless_request_body(self):
         """Test for a special property of the `dcos-oidc-auth0` auth provider.
