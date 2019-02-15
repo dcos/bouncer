@@ -127,90 +127,6 @@ paths:
         200:
           description: Success.
 
-  /auth/oidc/providers/{provider-id}:
-    get:
-      summary: Get configuration for a specific provider.
-      description: Get configuration for a specific provider.
-      tags:
-        - oidc
-      produces:
-        - application/json
-      parameters:
-        - name: provider-id
-          in: path
-          required: true
-          description: The ID of the OIDC provider to retrieve the config for.
-          type: string
-      responses:
-        200:
-          description: Success.
-          schema:
-            $ref: "#/definitions/OIDCProviderConfig"
-    put:
-      summary: Configure a new OIDC provider.
-      description: >
-        Set up OIDC provider with the ID as specified in the URL,
-        and with the config as specified via JSON in the request body.
-      tags:
-        - oidc
-      consumes:
-        - application/json
-      parameters:
-        - name: provider-id
-          in: path
-          required: true
-          description: The ID of the provider to create.
-          type: string
-        - name:  Provider config object
-          description: Provider config JSON object
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/OIDCProviderConfig"
-      responses:
-        201:
-          description: Provider created.
-        409:
-          description: Provider already exists.
-    patch:
-      summary: Update OIDC provider config.
-      description: Update config for existing OIDC provider.
-      tags:
-        - oidc
-      consumes:
-        - application/json
-      parameters:
-        - name: provider-id
-          in: path
-          required: true
-          description: The ID of the provider to modify.
-          type: string
-        - name: Provider config object
-          description: Provider config JSON object
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/OIDCProviderConfig"
-      responses:
-        204:
-          description: Update applied.
-        400:
-          description: Various errors (e.g. provider not yet configured).
-    delete:
-      summary: Delete provider.
-      description: Delete provider (disables authentication with that provider).
-      tags:
-        - oidc
-      parameters:
-        - name: provider-id
-          in: path
-          required: true
-          description: The ID of the OIDC provider to delete.
-          type: string
-      responses:
-        204:
-          description: Success.
-
   /users:
     get:
       summary: Retrieve all regular user accounts or service user accounts.
@@ -396,30 +312,5 @@ definitions:
       description:
         type: string
       password:
-        type: string
-    additionalProperties: false
-
-  OIDCProviderConfig:
-    type: object
-    required:
-      - description
-      - issuer
-      - base_url
-      - client_secret
-      - client_id
-    properties:
-      description:
-        type: string
-      issuer:
-        type: string
-      base_url:
-        type: string
-      client_secret:
-        type: string
-      client_id:
-        type: string
-      verify_server_certificate:
-        type: boolean
-      ca_certs:
         type: string
     additionalProperties: false
