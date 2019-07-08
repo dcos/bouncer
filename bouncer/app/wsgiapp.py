@@ -45,6 +45,20 @@ class RequestMiddleware:
         # Default: indicate that no incoming body data was retrieved.
         req.context['idata'] = None
 
+        # Log the client connection
+        remote_service = req.get_header('X-Sender')
+        if remote_service is None:
+            if req.user_agent in (
+                'curl/7.65.1', 'dcos-go', 'Go-http-client/1.1', 'Master Admin Router',
+                'python-requests/2.20.1'
+            ):
+                remote_service = req.user_agent
+            else:
+                log.error("Rejecting direct access by User-Agent %s", req.user_agent)
+                raise falcon.HTTPBadRequest(
+                    description='Bad sender', code='ERR_BAD_SENDER')
+        log.info('%s:%s ->', req.remote_addr, remote_service)
+
         # Require that the client accepts JSON responses. This is fulfilled
         # when Accept header is missing or when it is wildcarded, or when it
         # is explicitly set to application/json. From RFC 7231: "A request
