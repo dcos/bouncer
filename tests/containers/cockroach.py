@@ -19,7 +19,7 @@ from .containerbase import ContainerBase
 log = logging.getLogger(__name__)
 
 
-COCKROACH_IMAGE = 'cockroachdb/cockroach:v2.1.7'
+COCKROACH_IMAGE = 'cockroachdb/cockroach:v2.1.8'
 
 
 class ContainerCockroach(ContainerBase):
