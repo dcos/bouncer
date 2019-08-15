@@ -310,26 +310,41 @@ class RetryTransactions:
         self.resource = resource
 
     def on_get(self, req, resp, **params):
+        if hasattr(self.resource.on_get, 'no_retry'):
+            return self.resource.on_get(req, resp, **params)
+
         def wrapped_responder():
             return self.resource.on_get(req, resp, **params)
         return run_transaction(wrapped_responder)
 
     def on_put(self, req, resp, **params):
+        if hasattr(self.resource.on_put, 'no_retry'):
+            return self.resource.on_put(req, resp, **params)
+
         def wrapped_responder():
             return self.resource.on_put(req, resp, **params)
         return run_transaction(wrapped_responder)
 
     def on_post(self, req, resp, **params):
+        if hasattr(self.resource.on_post, 'no_retry'):
+            return self.resource.on_post(req, resp, **params)
+
         def wrapped_responder():
             return self.resource.on_post(req, resp, **params)
         return run_transaction(wrapped_responder)
 
     def on_patch(self, req, resp, **params):
+        if hasattr(self.resource.on_patch, 'no_retry'):
+            return self.resource.on_patch(req, resp, **params)
+
         def wrapped_responder():
             return self.resource.on_patch(req, resp, **params)
         return run_transaction(wrapped_responder)
 
     def on_delete(self, req, resp, **params):
+        if hasattr(self.resource.on_delete, 'no_retry'):
+            return self.resource.on_delete(req, resp, **params)
+
         def wrapped_responder():
             return self.resource.on_delete(req, resp, **params)
         return run_transaction(wrapped_responder)
