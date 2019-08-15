@@ -7,7 +7,7 @@ coupled with SQLAlchemy-based relational database management.
 """
 
 
-from .session import Database, dbsession, run_transaction
+from .session import Database, dbsession, no_retry_on_serializable_failure, run_transaction
 from .user import UserBase, User, UserType
 from .config import ConfigItem, ConfigKeyNotFound, ConfigKeyExists
 from .base import DeclarativeBase
