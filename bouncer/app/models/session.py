@@ -387,6 +387,41 @@ def _bootstrap():
     dbsession.commit()
 
 
+# CockroachDB enforces serializable consistency such that all queries
+# see a state that would exist if all transactions were performed
+# sequentially.  If parallel transactions get to a state where this is
+# not possible, then some will rollback with a serialization failure.
+#
+# The desirable behavior in this case is to retry the failed
+# transaction.  We could just run the code again, along with begin and
+# commit commands.  However, using a savepoint means that the
+# transaction gets higher priority on a retry, avoiding starvation.
+#
+# The `run_transaction` function creates a CockroachDB savepoint for the
+# `callback` function. Note that this is copied from
+# https://github.com/cockroachdb/cockroachdb-python/
+# blob/master/cockroachdb/sqlalchemy/transaction.py
+# We use our own copy since the original does not support SQLAlchemy
+# `scoped_session`.
+#
+# We wrap `run_transaction` around each Falcon `on_{get,put,...}`
+# handler, so that the whole request gets re-run on a serialization
+# failure.
+#
+# If this is not desirable (e.g. for handlers that spend lots of time
+# doing non-database actions) use the `no_retry_on_serializable_failure`
+# decorator on the Falcon handler. In this case, the handler then
+# becomes responsible for ensuring that transactions and serialization
+# failures are handled correctly.
+
+def no_retry_on_serializable_failure(func):
+    """
+    Decorator to indicate that this function should not be retried.
+    """
+    func.no_retry = True
+    return func
+
+
 def run_transaction(callback):
     return _txn_retry_loop(dbsession, callback)
 

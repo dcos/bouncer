@@ -42,7 +42,8 @@ RUN set -ex \
 # Refs:
 #   https://github.com/docker/docker/issues/12327#issuecomment-188921470
 #   https://github.com/docker/docker/issues/12327#issuecomment-187158265
-RUN python -m pip install --upgrade virtualenv
+# Not yet compatible with virtualenv 20+
+RUN python -m pip install --upgrade 'virtualenv<20'
 
 # Ensure that no previous PYTHONPATH pollution affects the creation of this
 # virtualenv. Ref: http://stackoverflow.com/a/15887589/145400

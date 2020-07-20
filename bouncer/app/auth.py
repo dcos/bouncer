@@ -317,10 +317,9 @@ class Login:
             # others will see a 500 Internal Server Error response). Store
             # issuer as provider_id so that we keep record of which identity
             # provider precisely emitted the data.
-            descr = f'User added through OIDC ID Token login. Issuer: {issuer}'
             user = import_remote_user(
                 uid=uid,
-                description=descr,
+                description=email,
                 provider_type=ProviderType.oidc,
                 provider_id=issuer
             )
