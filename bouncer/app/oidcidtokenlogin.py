@@ -108,11 +108,11 @@ def verify_id_token_or_terminate(req, resp, id_token):
             audience=expected_audience,
             options={'require_exp': True},
         )
-    except jwt.exceptions.InvalidSignatureError as exc:
+    except jwt.exceptions.InvalidSignatureError:
         _terminate_bad_token('bad signature', unverified_claims, id_token)
-    except jwt.exceptions.InvalidAudienceError as exc:
+    except jwt.exceptions.InvalidAudienceError:
         _terminate_bad_token('unexpected `aud`', unverified_claims, id_token)
-    except jwt.exceptions.ExpiredSignatureError as exc:
+    except jwt.exceptions.ExpiredSignatureError:
         _terminate_regular_401('token expired', unverified_claims)
     except jwt.exceptions.InvalidTokenError as exc:
         # Treat everything else as bad/malicious token.

@@ -179,4 +179,4 @@ class TestOpenAPIspec:
         assert yaml_bytes
         # Confirm that the byte sequences can be decoded using UTF-8, and that
         # the resulting text is a serialized YAML document.
-        yaml.load(yaml_bytes.decode('utf-8'))
+        yaml.safe_load(yaml_bytes.decode('utf-8'))
