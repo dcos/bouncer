@@ -127,7 +127,7 @@ class RequestMiddleware:
             # payload was itself found. In the absence of a better default,
             # UTF-8 is suggested."
             body = body.decode('utf-8')
-        except UnicodeDecodeError as e:
+        except UnicodeDecodeError:
             raise falcon.HTTPBadRequest(
                 'Bad Request',
                 'Cannot decode form body using UTF-8 codec'

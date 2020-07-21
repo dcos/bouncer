@@ -97,8 +97,8 @@ help:
 rebuild-container-images:
 	@echo "+ (Re)build devkit container image and periphery container images"
 	docker build --rm --force-rm --tag $(DEVKIT_CONTAINER_IMAGE_TAG):latest $(BOUNCER_LOCAL_PATH)/
-	# The following three are extension points for downstream, therefore optional.
-	-docker build --rm --force-rm -t mesosphereci/bouncer-test-dex:latest $(BOUNCER_LOCAL_PATH)/tests/containers/dex/
+	docker build --rm --force-rm -t mesosphereci/bouncer-test-dex:latest $(BOUNCER_LOCAL_PATH)/tests/containers/dex/
+	# The following two are extension points for downstream, therefore optional.
 	-docker build --rm --force-rm -t mesosphereci/bouncer-test-pysaml2-idp:latest $(BOUNCER_LOCAL_PATH)/tests/containers/pysaml2-idp/
 	-docker build --rm --force-rm -t mesosphereci/bouncer-test-pyoidc-op2:latest $(BOUNCER_LOCAL_PATH)/tests/containers/pyoidc-op/
 
