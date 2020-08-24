@@ -31,7 +31,7 @@ RUN set -ex \
         dnsutils net-tools less \
         gcc \
         python3-dev \
-        nmap \
+        ncat \
         nano \
         less
 
