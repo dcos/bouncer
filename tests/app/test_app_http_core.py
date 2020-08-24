@@ -19,7 +19,7 @@ from tests.misc import Url
 # "Note that the assigned variable must be called pytestmark"
 # Assigning a list is not well-documented, found that here:
 # https://github.com/pytest-dev/pytest/issues/816#issuecomment-119545763
-pytestmark = [pytest.mark.app, pytest.mark.usefixtures("wsgi_app")]
+pytestmark = [pytest.mark.usefixtures("wsgi_app")]
 
 
 class TestMiddlewareHeaderValidation:
