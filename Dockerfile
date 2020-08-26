@@ -1,5 +1,4 @@
-# python:3.6.6 is based on buildpack-deps:stretch (Debian Stretch)
-FROM python:3.6.6
+FROM python:3.6.12
 
 # The unit test suite requires running the docker client binary. As the binary
 # from the host is usually linked against system libraries (which are usually
@@ -32,7 +31,7 @@ RUN set -ex \
         dnsutils net-tools less \
         gcc \
         python3-dev \
-        nmap \
+        ncat \
         nano \
         less
 
