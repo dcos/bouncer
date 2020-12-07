@@ -49,7 +49,7 @@ RUN python -m pip install --upgrade 'virtualenv<20'
 RUN unset PYTHONPATH
 
 RUN virtualenv --no-site-packages /venv \
-    && /venv/bin/pip install --upgrade setuptools pip
+    && /venv/bin/pip install --upgrade setuptools 'pip<20.3'
 
 # Copy Bouncer's requirements files into the image (if they change,
 # the image needs to be rebuilt).
