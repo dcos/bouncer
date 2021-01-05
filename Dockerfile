@@ -1,17 +1,5 @@
 FROM python:3.6.12
 
-# The unit test suite requires running the docker client binary. As the binary
-# from the host is usually linked against system libraries (which are usually
-# not available within the container), a simple mount is not sufficient. The
-# safest approach is to pull in a statically linked docker client binary. As
-# older clients can talk to newer hosts, don't pull in the cutting edge.
-# Ref:
-#   https://github.com/docker/docker/issues/19230#issuecomment-172916544
-RUN set -ex \
-    && curl -sSL -O https://get.docker.com/builds/Linux/x86_64/docker-1.9.1 \
-    && mv docker-1.9.1 /usr/bin/docker \
-    && chmod 0755 /usr/bin/docker
-
 # `apt-get update` and `apt-get install` are unreliable and http-redir service
 # seems to be unmaintained. Because of that there is some basic retrying logic
 # and apt is reconfigured to use deb.debian.org for mirrors. Please check
@@ -27,13 +15,30 @@ RUN set -ex \
     && sed -i -e 's/httpredir.debian.org/deb.debian.org/g' /etc/apt/sources.list \
     && bash -x -c 'for i in {1..5}; do apt-get update && break || sleep 2; done' \
     && apt-get install -y --no-install-recommends \
-        ca-certificates libxmlsec1-dev libxmlsec1-openssl \
-        dnsutils net-tools less \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        dnsutils net-tools \
         gcc \
-        python3-dev \
-        ncat \
+        gnupg-agent \
+        less \
+        libxmlsec1-dev \
+        libxmlsec1-openssl \
         nano \
-        less
+        ncat \
+        python3-dev \
+        software-properties-common
+
+# The unit test suite requires running the docker client binary. As the binary
+# from the host is usually linked against system libraries (which are usually
+# not available within the container), a simple mount is not sufficient.
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+    && add-apt-repository \
+"deb [arch=amd64] https://download.docker.com/linux/debian \
+$(lsb_release -cs) \
+stable" \
+    && apt-get update \
+    && apt-get install docker-ce-cli
 
 # Upgrading pip/setuptools and making the upgrade actually apply in the
 # following filesystem layers works more reliable when using a virtualenv for
