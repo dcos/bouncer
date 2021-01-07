@@ -1,5 +1,4 @@
-# python:3.6.6 is based on buildpack-deps:stretch (Debian Stretch)
-FROM python:3.6.6
+FROM python:3.6.12
 
 # `apt-get update` and `apt-get install` are unreliable and http-redir service
 # seems to be unmaintained. Because of that there is some basic retrying logic
@@ -27,7 +26,6 @@ RUN set -ex \
         libxmlsec1-openssl \
         nano \
         ncat \
-        nmap \
         python3-dev \
         software-properties-common
 
@@ -56,7 +54,7 @@ RUN python -m pip install --upgrade 'virtualenv<20'
 RUN unset PYTHONPATH
 
 RUN virtualenv --no-site-packages /venv \
-    && /venv/bin/pip install --upgrade setuptools pip
+    && /venv/bin/pip install --upgrade setuptools 'pip<20.3'
 
 # Copy Bouncer's requirements files into the image (if they change,
 # the image needs to be rebuilt).
