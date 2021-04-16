@@ -130,9 +130,9 @@ yyuu/pyenv-based workflow:
     #   https://github.com/yyuu/pyenv-virtualenv#installing-as-a-pyenv-plugin
 
     # Create custom local Python build and create a virtualenv from it.
-    pyenv install 3.6.12
-    pyenv virtualenv 3.6.12 venv3612-bouncer
-    pyenv activate venv3612-bouncer
+    pyenv install 3.6.13
+    pyenv virtualenv 3.6.13 venv36-bouncer
+    pyenv activate venv36-bouncer
 
     # cd to the Bouncer repository and install dependencies from PyPI.
     pip install -r requirements.txt --upgrade

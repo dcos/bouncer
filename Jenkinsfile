@@ -47,7 +47,7 @@ task_wrapper('mesos-sec', master_branches, '8b793652-f26a-422f-a9ba-0d1e47eb9d89
     } finally {
 
         stage('archive artifacts') {
-            archiveArtifacts allowEmptyArchive: true, artifacts: 'gunicorn_*.outerr', fingerprint: true
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'gunicorn_*.outerr', fingerprint: false
         }
 
         stage('make clean'){
