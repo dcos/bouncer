@@ -1,4 +1,4 @@
-FROM python:3.6.12
+FROM python:3.6.13
 
 # `apt-get update` and `apt-get install` are unreliable and http-redir service
 # seems to be unmaintained. Because of that there is some basic retrying logic
@@ -38,7 +38,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 $(lsb_release -cs) \
 stable" \
     && apt-get update \
-    && apt-get install docker-ce-cli
+    && apt-get install -y docker-ce-cli
 
 # Upgrading pip/setuptools and making the upgrade actually apply in the
 # following filesystem layers works more reliable when using a virtualenv for

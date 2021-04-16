@@ -1,4 +1,4 @@
-FROM python:3.6.11
+FROM python:3.6.13
 
 # Requirements for running pyoidc's OP2 demo:
 # * pip install https://pypi.python.org/pypi/oic
